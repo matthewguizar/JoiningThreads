@@ -1,0 +1,4 @@
+Generates random number and tries to match 0.5
+with a precision of 0.000000001. Takes a long time to complete
+so it creates another thread and joins it to main thread so
+the main thread does not finish until the match is found.
