@@ -1,5 +1,8 @@
 import java.util.Scanner;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 public class Main {
@@ -14,23 +17,29 @@ public class Main {
         //call generateNumber here...
         // Runnable runnable = () -> result = generateNumber();
         //Callable<Double> callable = () -> generateNumber(); //if your task returns something use callable
-        //threads aren't designed to return results can only be created out of a runnable
-        //future task implements Runnable interface
-        FutureTask<Double> future = new FutureTask<>(() -> generateNumber(0));
-        //so future task can behave as a runnable
-        Thread thread2 = new Thread(future);
 
-        FutureTask<Double> future2 = new FutureTask<>(() -> generateNumber(1));
-        Thread thread3 = new Thread(future);
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+        Future<Double> future = executor.submit(() -> generateNumber(0));
+        Future<Double> future2 = executor.submit(() -> generateNumber(1));
+        Future<Double> future3 = executor.submit(() -> generateNumber(2));
 
-        FutureTask<Double> future3 = new FutureTask<>(() -> generateNumber(2));
-        Thread thread4 = new Thread(future);
+        // //threads aren't designed to return results can only be created out of a runnable
+        // //future task implements Runnable interface
+        // FutureTask<Double> future = new FutureTask<>(() -> generateNumber(0));
+        // //so future task can behave as a runnable
+        // Thread thread2 = new Thread(future);
+
+        // FutureTask<Double> future2 = new FutureTask<>(() -> generateNumber(1));
+        // Thread thread3 = new Thread(future);
+
+        // FutureTask<Double> future3 = new FutureTask<>(() -> generateNumber(2));
+        // Thread thread4 = new Thread(future);
 
 
-        thread2.start();
-        thread3.start();
-        thread4.start();
-        //calculate precision level here...
+        // thread2.start();
+        // thread3.start();
+        // thread4.start();
+       
         
 
         Scanner scan = new Scanner(System.in);
@@ -42,6 +51,8 @@ public class Main {
             future.get();
             future2.get();
             future3.get();
+            //tasks don't shutdown 
+            executor.shutdown();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
